@@ -1,0 +1,44 @@
+import { ButtonHTMLAttributes, forwardRef } from 'react';
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+function cn(...inputs: (string | undefined | null | false)[]) {
+    return twMerge(clsx(inputs));
+}
+
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    variant?: 'primary' | 'secondary' | 'accent' | 'outline' | 'ghost';
+    size?: 'sm' | 'md' | 'lg' | 'icon';
+}
+
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+    ({ className, variant = 'primary', size = 'md', ...props }, ref) => {
+        return (
+            <button
+                ref={ref}
+                className={cn(
+                    'inline-flex items-center justify-center font-medium transition-all duration-200 cursor-pointer',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2',
+                    'disabled:pointer-events-none disabled:opacity-50',
+                    'rounded-lg',
+                    // Variants
+                    variant === 'primary' && 'bg-slate-900 text-white hover:bg-slate-800 active:bg-slate-950 shadow-sm',
+                    variant === 'secondary' && 'bg-slate-100 text-slate-900 hover:bg-slate-200 active:bg-slate-300 shadow-sm',
+                    variant === 'accent' && 'bg-[var(--color-accent)] text-white hover:bg-[var(--color-accent-dark)] active:brightness-90 shadow-sm',
+                    variant === 'outline' && 'border-2 border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400',
+                    variant === 'ghost' && 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
+                    // Sizes
+                    size === 'sm' && 'h-9 px-4 text-xs',
+                    size === 'md' && 'h-11 px-5 text-sm',
+                    size === 'lg' && 'h-12 px-8 text-base',
+                    size === 'icon' && 'h-10 w-10',
+                    className
+                )}
+                {...props}
+            />
+        );
+    }
+);
+Button.displayName = 'Button';
+
+export { Button };
